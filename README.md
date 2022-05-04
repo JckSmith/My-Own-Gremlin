@@ -1,7 +1,7 @@
 <h3 align="center">My Own Gremlin</h3>
 <p align="center">A Virtual Pet Game</p>
 
-![Home Page](/src/assets/images/home_page.png)
+
 
 
 ## Built with
