@@ -2,7 +2,7 @@
 <p align="center">A Virtual Pet Game</p>
 
 
-
+<a href="https://www.google.com/" target="_blank">Google</a>
 
 ## Built with
 - [Reactjs](https://reactjs.org/)
