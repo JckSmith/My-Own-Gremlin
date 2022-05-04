@@ -2,7 +2,7 @@
 <p align="center">A Virtual Pet Game</p>
 
 
-<a href="https://www.google.com/" target="_blank">Google</a>
+<a href="https://github.com/JckSmith/My-Own-Gremlin-Backend" target="_blank">Backend</a>
 
 ## Built with
 - [Reactjs](https://reactjs.org/)
