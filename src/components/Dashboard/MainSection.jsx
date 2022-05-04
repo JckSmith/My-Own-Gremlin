@@ -9,55 +9,77 @@ import {
   UnorderedList,
   ListItem
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useDepleteGremlin } from './hooks';
 
-export default function MainSection() {
+export default function MainSection(props) {
+  const [gremlins, setGemlins] = useState([]);
+
+useDepleteGremlin(gremlins,d => setGemlins(d));
+
+  useEffect(() => {
+    axios.get('http://[::1]:3000/gremlins')
+    .then(res => {
+      setGemlins(res.data);
+    }).catch(error => {
+      console.log(error);
+    })
+  }, []);
+
+  console.log(gremlins);
+
+  const handleClick = (item) => {
+    props.history.push({
+      pathname: '/gremlin',
+      state: item
+    })
+  };
+
   return (
-    <Stack style={{ minHeight: 'calc(100vh - 4rem)' }} direction={{ base: 'column', md: 'row' }}>
-      <Flex p={8} flex={1} align={'center'} justify={'center'}>
+    <>
+      <Stack style={{}} direction={{ base: 'column', md: 'row' }}>
+      <Flex p={8} flex={1} align={'center'} >
         <Stack spacing={6} w={'full'} maxW={'lg'}>
           <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-            <Text
-              as={'span'}
-              position={'relative'}
-              _after={{
-                content: "''",
-                width: 'full',
-                height: useBreakpointValue({ base: '20%', md: '30%' }),
-                position: 'absolute',
-                bottom: 1,
-                left: 0,
-                bg: 'blue.400',
-                zIndex: -1,
-              }}
-            >
-              QuickStart
-            </Text>
-            <br />{' '}
-            <Text color={'blue.400'} as={'span'}>
-              React + Rails
+            
+            
+            <Text color={'red.400'} as={'span'}>
+              Your Gremlins
             </Text>{' '}
           </Heading>
-          <Flex justifyContent="center" textAlign="left">
-            <UnorderedList>
-              <ListItem>Uses React on Front-end.</ListItem>
-              <ListItem>Uses Context API for state management.</ListItem>
-              <ListItem>Uses Rails on Back-end.</ListItem>
-              <ListItem>Uses ChakraUI for UI.</ListItem>
-              <ListItem>Uses Devise for User authentication(token based).</ListItem>
-              <ListItem>Uses PostgreSQL database.</ListItem>
-            </UnorderedList>
+          <Flex align={'center'} textAlign="left">
+            
           </Flex>
         </Stack>
       </Flex>
       <Flex flex={1}>
-        <Image
-          alt={'Login Image'}
-          objectFit={'cover'}
-          src={
-            'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-          }
-        />
+        
       </Flex>
     </Stack>
+    <ul>
+    {gremlins && gremlins.map(gem => {
+
+      return (
+        <li key={gem.id} onClick={() => handleClick(gem)} style={{cursor: 'pointer'}}>
+          <div>Name: {gem.name}</div>
+          <div>Hunger: {gem.hunger}</div>
+          <div>Satisfaction: {gem.satisfaction}</div>
+          <hr />
+        </li>
+      );
+    })}
+    </ul>
+    <button onClick={async ()=>{
+          for (const gremlin of gremlins) {
+            await axios.put(`http://[::1]:3000/gremlins/${gremlin.id}`, {
+              hunger:100,
+              satisfaction: 100,
+            });
+          }
+          const { data } = await axios.get('http://[::1]:3000/gremlins');
+          setGemlins(data);
+    }}>RESET</button>
+    </>
   );
 }
